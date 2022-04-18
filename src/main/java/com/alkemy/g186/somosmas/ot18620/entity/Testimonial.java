@@ -3,12 +3,13 @@ package com.alkemy.g186.somosmas.ot18620.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -17,12 +18,13 @@ import java.util.Date;
 @Table(name="testimonials")
 @SQLDelete(sql = "UPDATE testimonials SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
-public class Testimonial implements Serializable {
-
+public class Testimonial {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
@@ -42,5 +44,4 @@ public class Testimonial implements Serializable {
         createAt = new Date();
     }
 
-    private static final long serialVersionUID = 1L;
 }
